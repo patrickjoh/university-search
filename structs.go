@@ -7,8 +7,19 @@ type Diagnosis struct {
 	Uptime          string `json:"uptime"`          // "<time in seconds from the last service restart>"
 }
 
-type Univeristies struct {
+type Universities struct {
+	// Oppdater/endre datatypene etter hva som blir mest riktig.
+	// Mest URLer
+	Name      string   `json:"name"`
+	Country   string   `json:"country"`
+	Isocode   string   `json:"isocode"`
+	Webpages  string   `json:"webpages"`
+	Languages []string `json:"languages"`
+	Map       string   `json:"map"`
 }
 
-type Neighbours struct {
+type Hipo struct {
+}
+
+type Countries struct {
 }

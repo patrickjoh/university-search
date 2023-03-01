@@ -16,7 +16,8 @@ func EmptyHandler(w http.ResponseWriter, r *http.Request) {
 	// Give information for correct usage (paths)
 	output := "This service does not provide functionality at this path. The functional paths are <a href=\"" +
 		UNIINFO_PATH + "\">" + UNIINFO_PATH + "</a> or <a href=\"" + NEIGHBOUR_PATH +
-		"\">" + NEIGHBOUR_PATH + "</a>."
+		"\">" + NEIGHBOUR_PATH + "</a>." + LINEBREAK + "For diagnostic information about the service, " +
+		"visit: <a href=\"" + DIAG_PATH + "\">" + DIAG_PATH + "</a>"
 
 	// Make the output visible to the client
 	_, err := fmt.Fprintf(w, "%v", output)

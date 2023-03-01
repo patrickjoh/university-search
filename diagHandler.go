@@ -59,6 +59,11 @@ func handleGetDiag(w http.ResponseWriter) {
 	output += "Version: " + "v1" + LINEBREAK
 	output += "Uptime: " + uptime.String() + LINEBREAK
 
-	// Write the output to the response
-	fmt.Fprint(w, output)
+	// Make the output visible to the client
+	_, err = fmt.Fprintf(w, "%v", output)
+
+	// Deal with error, if any
+	if err != nil {
+		http.Error(w, "Error when returning output", http.StatusInternalServerError)
+	}
 }
