@@ -1,6 +1,7 @@
 package university_search
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/http"
 	"time"
@@ -51,19 +52,22 @@ func handleGetDiag(w http.ResponseWriter) {
 		fmt.Errorf("error in response from CountriesAPI: %s", err)
 	}
 
-	// Prepare return info with api-availability
-	output := "Service Availability:" + LINEBREAK
-	output += "---------------------" + LINEBREAK
-	output += fmt.Sprintf("UniversityAPI: %s%s", uniRes.Status, LINEBREAK)
-	output += fmt.Sprintf("CountriesAPI: %s%s", countryRes.Status, LINEBREAK)
-	output += "Version: " + "v1" + LINEBREAK
-	output += "Uptime: " + uptime.String() + LINEBREAK
-
-	// Make the output visible to the client
-	_, err = fmt.Fprintf(w, "%v", output)
-
-	// Deal with error, if any
-	if err != nil {
-		http.Error(w, "Error when returning output", http.StatusInternalServerError)
+	diag := Diagnosis{
+		UniversitiesAPI: uniRes.Status,
+		CountriesAPI:    countryRes.Status,
+		Version:         "v1",
+		Uptime:          uptime.String(),
 	}
+
+	// Encode struct to JSON
+	jsonBytes, err := json.Marshal(diag)
+	if err != nil {
+		fmt.Errorf("error in encoding to JSON: %s", err)
+		return
+	}
+
+	// Write JSON to response
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	w.Write(jsonBytes)
 }
