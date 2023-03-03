@@ -5,6 +5,7 @@ import (
 	"errors"
 	"log"
 	"net/http"
+	"net/url"
 	"strings"
 )
 
@@ -32,7 +33,7 @@ func handleGetUni(w http.ResponseWriter, r *http.Request) {
 	parts := strings.Split(r.URL.Path, "/")
 
 	// Check that the URL contains the correct number of parts
-	if len(parts) != 5 {
+	if len(parts) > 5 {
 		http.Error(w, "Wrong URL", http.StatusBadRequest)
 		log.Println("Wrong URL in request")
 		return
@@ -86,7 +87,8 @@ func handleGetUni(w http.ResponseWriter, r *http.Request) {
 }
 
 func getUniversities(name []string) ([]University, error) {
-	uniUrl := UNIVERSITYAPI + strings.Join(name, "/")
+	encodedName := url.QueryEscape(strings.Join(name, " "))
+	uniUrl := UNIVERSITYAPI + encodedName
 	uniResponse, err := http.Get(uniUrl)
 	if err != nil {
 		return nil, err
