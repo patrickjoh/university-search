@@ -16,7 +16,7 @@ func main() {
 	}
 
 	// Set up handler endpoints
-	http.HandleFunc(university_search.DEFAULT_PATH, university_search.EmptyHandler)
+	http.HandleFunc(university_search.DEFAULT_PATH, university_search.DefaultHandler)
 	http.HandleFunc(university_search.UNIINFO_PATH, university_search.UniHandler)
 	http.HandleFunc(university_search.NEIGHBOUR_PATH, university_search.NeighbourHandler)
 	http.HandleFunc(university_search.DIAG_PATH, university_search.DiagHandler)
