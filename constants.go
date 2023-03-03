@@ -1,19 +1,24 @@
 package university_search
 
-// Default port
-const DEFAULT_PORT = "8080"
+const (
+	// Default port
+	DEFAULT_PORT = "8080"
 
-// Default path
-const DEFAULT_PATH = "/"
+	// Default path
+	DEFAULT_PATH = "/"
 
-// Path uniinfo
-const UNIINFO_PATH = "/unisearcher/v1/uniinfo"
+	// Path uniinfo
+	UNIINFO_PATH = "/unisearcher/v1/uniinfo/"
 
-// Path neighbourunis
-const NEIGHBOUR_PATH = "/unisearcher/v1/neighbourunis"
+	// Path neighbourunis
+	NEIGHBOUR_PATH = "/unisearcher/v1/neighbourunis/"
 
-// Path diagnostics
-const DIAG_PATH = "/unisearcher/v1/diag"
+	// Path diagnostics
+	DIAG_PATH = "/unisearcher/v1/diag/"
 
-// Line break
-const LINEBREAK = "\n"
+	// Line break
+	LINEBREAK = "\n"
+
+	UNIVERSITYAPI = "http://universities.hipolabs.com/search?name="
+	COUNTRYAPI    = "https://restcountries.com/v3.1/alpha/"
+)
