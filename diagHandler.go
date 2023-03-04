@@ -46,11 +46,13 @@ func handleGetDiag(w http.ResponseWriter) {
 	if err != nil {
 		fmt.Errorf("error in response from UniversitiesAPI: %s", err)
 	}
+	defer uniRes.Body.Close()
 
 	countryRes, err := client.Get(countryURL)
 	if err != nil {
 		fmt.Errorf("error in response from CountriesAPI: %s", err)
 	}
+	defer countryRes.Body.Close()
 
 	diag := Diagnosis{
 		UniversitiesAPI: uniRes.Status,

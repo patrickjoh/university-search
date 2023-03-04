@@ -8,7 +8,7 @@ import (
 /*
 Empty handler as default handler
 */
-func EmptyHandler(w http.ResponseWriter, r *http.Request) {
+func DefaultHandler(w http.ResponseWriter, r *http.Request) {
 
 	// Ensure that the server interprets requests as HTML from Client (browser)
 	w.Header().Set("content-type", "text/html")
