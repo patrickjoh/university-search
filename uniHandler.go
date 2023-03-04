@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"net/url"
 	"strings"
+	"time"
 )
 
 /*
@@ -33,15 +34,9 @@ func handleGetUni(w http.ResponseWriter, r *http.Request) {
 	parts := strings.Split(r.URL.Path, "/")
 
 	// Check that the URL contains the correct number of parts
-<<<<<<< HEAD
 	if len(parts) < 5 {
 		http.Error(w, "URL does not contain all necessary parts", http.StatusBadRequest)
 		log.Println("URL in request does not contain all necessary parts")
-=======
-	if len(parts) > 5 {
-		http.Error(w, "Wrong URL", http.StatusBadRequest)
-		log.Println("Wrong URL in request")
->>>>>>> 56ec615d7b655029d41063fed57320502f2d60a8
 		return
 	}
 
@@ -49,7 +44,7 @@ func handleGetUni(w http.ResponseWriter, r *http.Request) {
 	uniData, err := getUniversities(parts[4:])
 	if err != nil {
 		http.Error(w, "Error during request to UniversityAPI", http.StatusInternalServerError)
-		log.Println("Error during request to UniversityAPI")
+		log.Println("Error during request to UniversityAPI:", err)
 		return
 	}
 
@@ -68,7 +63,7 @@ func handleGetUni(w http.ResponseWriter, r *http.Request) {
 	countryData, err := getCountries(isocode)
 	if err != nil {
 		http.Error(w, "Error during request to CountryAPI", http.StatusInternalServerError)
-		log.Println("Error during request to CountryAPI")
+		log.Println("Error during request to CountryAPI:", err)
 		return
 	}
 
@@ -94,24 +89,22 @@ func handleGetUni(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Marshal the response slice to JSON
-	marshallResponse, err := json.Marshal(response)
+	marshalledResponse, err := json.Marshal(response)
 	if err != nil {
 		http.Error(w, "Error during formatting", http.StatusInternalServerError)
+		log.Println("Error during JSON marshalling:", err)
 		return
 	}
 
 	// Write the response
 	w.WriteHeader(http.StatusOK)
-	w.Write(marshallResponse)
+	w.Write(marshalledResponse)
 }
 
 func getUniversities(name []string) ([]University, error) {
 	encodedName := url.QueryEscape(strings.Join(name, " "))
 	uniUrl := UNIVERSITYAPI + encodedName
-<<<<<<< HEAD
 	// Get the response from the API
-=======
->>>>>>> 56ec615d7b655029d41063fed57320502f2d60a8
 	uniResponse, err := http.Get(uniUrl)
 	if err != nil {
 		return nil, err
@@ -135,8 +128,11 @@ func getUniversities(name []string) ([]University, error) {
 }
 
 func getCountries(isoCode []string) ([]Country, error) {
+	if len(isoCode) == 0 {
+		return nil, errors.New("No ISO codes provided")
+	}
 
-	countryUrl := "https://restcountries.com/v3.1/alpha?codes="
+	countryUrl := COUNTRYAPI
 	// Loop through each ISO code and append the code the URL
 	// Append each code to the URL with a comma delimiter
 	for _, code := range isoCode {
@@ -145,7 +141,12 @@ func getCountries(isoCode []string) ([]Country, error) {
 	// Remove the last comma from the URL
 	countryUrl = countryUrl[:len(countryUrl)-1]
 
-	countryResponse, err := http.Get(countryUrl)
+	// Create an HTTP client with a 10 second timeout
+	client := http.Client{
+		Timeout: 10 * time.Second,
+	}
+
+	countryResponse, err := client.Get(countryUrl)
 	if err != nil {
 		return nil, err
 	}

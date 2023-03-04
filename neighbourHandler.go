@@ -40,7 +40,6 @@ func handleGetNeighbour(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-
 		// Get university data from UniversityAPI
 		uniData := getUniversities(parts[5:])
 		if err != nil {
