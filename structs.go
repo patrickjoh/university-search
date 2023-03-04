@@ -4,7 +4,11 @@ package university_search
 type Diagnosis struct {
 	UniversitiesAPI string `json:"universities_api"` // "<http status code for universities API>",
 	CountriesAPI    string `json:"countries_api"`    // "<http status code for rest_countries API>",
+<<<<<<< HEAD
 	Version         string `json:"version"`          // "v1",
+=======
+	Version         string `json:"v1"`               // "v1",
+>>>>>>> 56ec615d7b655029d41063fed57320502f2d60a8
 	Uptime          string `json:"uptime"`           // "<time in seconds from the last service restart>"
 }
 
@@ -18,7 +22,11 @@ type University struct {
 
 // Country Struct for storing data from REST Countries API
 type Country struct {
+<<<<<<< HEAD
 	Alpha2Code string            `json:"cca2"`
+=======
+	IsoCode    string            `json:"cca2"`
+>>>>>>> 56ec615d7b655029d41063fed57320502f2d60a8
 	Alpha3Code string            `json:"cca3"`
 	Languages  map[string]string `json:"languages"`
 	Maps       map[string]string `json:"maps"`

@@ -33,9 +33,15 @@ func handleGetUni(w http.ResponseWriter, r *http.Request) {
 	parts := strings.Split(r.URL.Path, "/")
 
 	// Check that the URL contains the correct number of parts
+<<<<<<< HEAD
 	if len(parts) < 5 {
 		http.Error(w, "URL does not contain all necessary parts", http.StatusBadRequest)
 		log.Println("URL in request does not contain all necessary parts")
+=======
+	if len(parts) > 5 {
+		http.Error(w, "Wrong URL", http.StatusBadRequest)
+		log.Println("Wrong URL in request")
+>>>>>>> 56ec615d7b655029d41063fed57320502f2d60a8
 		return
 	}
 
@@ -102,7 +108,10 @@ func handleGetUni(w http.ResponseWriter, r *http.Request) {
 func getUniversities(name []string) ([]University, error) {
 	encodedName := url.QueryEscape(strings.Join(name, " "))
 	uniUrl := UNIVERSITYAPI + encodedName
+<<<<<<< HEAD
 	// Get the response from the API
+=======
+>>>>>>> 56ec615d7b655029d41063fed57320502f2d60a8
 	uniResponse, err := http.Get(uniUrl)
 	if err != nil {
 		return nil, err
