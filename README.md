@@ -152,10 +152,6 @@ Path: diag/
 ### Contributors
 * Patrick Johannessen (Owner)
 
-### Aknowledgements
+### Acknowledgements
 * Christopher Frantz (Lecturer)
-
-
-
-
 
