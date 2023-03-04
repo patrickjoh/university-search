@@ -132,7 +132,7 @@ func getCountries(isoCode []string) ([]Country, error) {
 		return nil, errors.New("No ISO codes provided")
 	}
 
-	countryUrl := COUNTRYAPI
+	countryUrl := COUNTRYAPI_CODES
 	// Loop through each ISO code and append the code the URL
 	// Append each code to the URL with a comma delimiter
 	for _, code := range isoCode {
