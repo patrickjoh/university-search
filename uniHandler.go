@@ -5,11 +5,12 @@ import (
 	"errors"
 	"log"
 	"net/http"
+	"net/url"
 	"strings"
 )
 
 /*
-Entry point for handler of UniHandler information
+UniHandler Entry point for handler
 */
 func UniHandler(w http.ResponseWriter, r *http.Request) {
 
@@ -32,9 +33,9 @@ func handleGetUni(w http.ResponseWriter, r *http.Request) {
 	parts := strings.Split(r.URL.Path, "/")
 
 	// Check that the URL contains the correct number of parts
-	if len(parts) != 5 {
-		http.Error(w, "Wrong URL", http.StatusBadRequest)
-		log.Println("Wrong URL in request")
+	if len(parts) < 5 {
+		http.Error(w, "URL does not contain all necessary parts", http.StatusBadRequest)
+		log.Println("URL in request does not contain all necessary parts")
 		return
 	}
 
@@ -42,35 +43,48 @@ func handleGetUni(w http.ResponseWriter, r *http.Request) {
 	uniData, err := getUniversities(parts[4:])
 	if err != nil {
 		http.Error(w, "Error during request to UniversityAPI", http.StatusInternalServerError)
-		log.Println("Error during request")
+		log.Println("Error during request to UniversityAPI")
 		return
 	}
 
-	// Initialize a slice to hold all of the response objects
+	// Initialize a slice to hold all response objects
 	var response []Response
 
+	var isocode []string
 	// Loop through each university in the response
 	for _, uni := range uniData {
+		// Append the isocode to a []string to be used in the getCountries function
+		isocode = append(isocode, uni.Alpha2Code)
 		// Get country data from "restcountries" API based on the university's ISO code
-		countryData, err := getCountries(uni.IsoCode)
-		if err != nil {
-			http.Error(w, "Error during request to CountryAPI", http.StatusInternalServerError)
-			log.Println("Error during request")
-			return
-		}
+	}
 
-		// Create the response object for this university
-		responseObj := Response{
-			Name:      uni.Name,
-			Country:   uni.Name,
-			IsoCode:   uni.IsoCode,
-			WebPages:  uni.WebPages,
-			Languages: countryData[0].Languages,
-			Maps:      countryData[0].Maps,
-		}
+	// Get country data from "restcountries" API based on the university's ISO code
+	countryData, err := getCountries(isocode)
+	if err != nil {
+		http.Error(w, "Error during request to CountryAPI", http.StatusInternalServerError)
+		log.Println("Error during request to CountryAPI")
+		return
+	}
 
-		// Add the response object to the slice of responses
-		response = append(response, responseObj)
+	// Loop through each country in the response
+	for _, country := range countryData {
+		// Loop through each university in the response
+		for _, uni := range uniData {
+			// Find the country that matches the current university
+			if uni.Alpha2Code == country.Alpha2Code {
+				// Create the response object for this university
+				responseObj := Response{
+					Name:      uni.Name,
+					Country:   uni.Country,
+					IsoCode:   uni.Alpha2Code,
+					WebPages:  uni.WebPages,
+					Languages: country.Languages,
+					Maps:      country.Maps,
+				}
+				// Add the response object to the slice of responses
+				response = append(response, responseObj)
+			}
+		}
 	}
 
 	// Marshal the response slice to JSON
@@ -81,16 +95,19 @@ func handleGetUni(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Write the response
-	w.Write(marshallResponse)
 	w.WriteHeader(http.StatusOK)
+	w.Write(marshallResponse)
 }
 
 func getUniversities(name []string) ([]University, error) {
-	uniUrl := UNIVERSITYAPI + strings.Join(name, "/")
+	encodedName := url.QueryEscape(strings.Join(name, " "))
+	uniUrl := UNIVERSITYAPI + encodedName
+	// Get the response from the API
 	uniResponse, err := http.Get(uniUrl)
 	if err != nil {
 		return nil, err
 	}
+
 	// Close the response body after the function has returned
 	defer uniResponse.Body.Close()
 	// Decode the JSON response into a slice of "University" structs
@@ -108,13 +125,22 @@ func getUniversities(name []string) ([]University, error) {
 	return uniData, nil
 }
 
-func getCountries(isoCode string) ([]Country, error) {
-	countryUrl := COUNTRYAPI + isoCode
+func getCountries(isoCode []string) ([]Country, error) {
+
+	countryUrl := "https://restcountries.com/v3.1/alpha?codes="
+	// Loop through each ISO code and append the code the URL
+	// Append each code to the URL with a comma delimiter
+	for _, code := range isoCode {
+		countryUrl += code + ","
+	}
+	// Remove the last comma from the URL
+	countryUrl = countryUrl[:len(countryUrl)-1]
+
 	countryResponse, err := http.Get(countryUrl)
 	if err != nil {
 		return nil, err
 	}
-	// defer countryResponse.Body.Close()
+	defer countryResponse.Body.Close()
 
 	// Decode the JSON response into a slice of "Country" structs
 	var countryData []Country

@@ -20,5 +20,5 @@ const (
 	LINEBREAK = "\n"
 
 	UNIVERSITYAPI = "http://universities.hipolabs.com/search?name="
-	COUNTRYAPI    = "https://restcountries.com/v3.1/alpha/"
+	COUNTRYAPI    = "https://restcountries.com/v3.1/alpha?codes="
 )
