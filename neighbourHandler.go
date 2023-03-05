@@ -50,7 +50,7 @@ func handleGetNeighbour(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Get bordering countries data from "RESTcountries" API
-	specCountryURL := COUNTRYAPI_NAME + parts[4]
+	specCountryURL := COUNTRYAPI_NAME + parts[4] + "?fullText=true"
 	countryResponse, err := http.Get(specCountryURL)
 	if err != nil {
 		http.Error(w, "Error during request to CountryAPI", http.StatusInternalServerError)
