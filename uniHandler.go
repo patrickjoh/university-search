@@ -47,9 +47,6 @@ func handleGetUni(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Initialize a slice to hold all response objects
-	var response []Response
-
 	var isocode []string
 
 	// Loop through each university in the response
@@ -75,6 +72,9 @@ func handleGetUni(w http.ResponseWriter, r *http.Request) {
 		log.Println("Error during request to CountryAPI")
 		return
 	}
+
+	// Initialize a slice to hold all response objects
+	var response []Response
 
 	// Loop through each university in the response
 	for _, uni := range uniData {
@@ -137,7 +137,7 @@ func getUniversities(name []string) ([]University, error) {
 
 func getCountries(isoCode []string) ([]Country, error) {
 
-	countryUrl := "https://restcountries.com/v3.1/alpha?codes="
+	countryUrl := COUNTRYAPI_CODES
 	// Loop through each ISO code and append the code the URL
 	// Append each code to the URL with a comma delimiter
 	isoCodesStr := strings.Join(isoCode, ",")
