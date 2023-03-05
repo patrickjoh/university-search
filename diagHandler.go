@@ -38,7 +38,9 @@ func handleGetDiag(w http.ResponseWriter) {
 	countryURL := "https://restcountries.com/"
 
 	// Instantiate the client
-	client := &http.Client{}
+	client := &http.Client{
+		Timeout: 5 * time.Second,
+	}
 	defer client.CloseIdleConnections()
 
 	// Issue the requests for UniversitiesAPI and CountriesAPI

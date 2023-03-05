@@ -19,6 +19,7 @@ const (
 	// Line break
 	LINEBREAK = "\n"
 
-	UNIVERSITYAPI = "http://universities.hipolabs.com/search?name="
-	COUNTRYAPI    = "https://restcountries.com/v3.1/alpha?codes="
+	UNIVERSITYAPI    = "http://universities.hipolabs.com/search?name="
+	COUNTRYAPI_CODES = "https://restcountries.com/v3.1/alpha?codes="
+	COUNTRYAPI_NAME  = "https://restcountries.com/v3.1/name/"
 )
