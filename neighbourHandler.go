@@ -49,8 +49,6 @@ func handleGetNeighbour(w http.ResponseWriter, r *http.Request) {
 		limitBool = false
 	}
 
-	log.Println("Limit parameter is set to: ", limitBool)
-
 	// Get bordering countries data from "RESTcountries" API
 	specCountryURL := COUNTRYAPI_NAME + parts[4]
 	countryResponse, err := http.Get(specCountryURL)
@@ -64,7 +62,7 @@ func handleGetNeighbour(w http.ResponseWriter, r *http.Request) {
 
 	// Struct to hold the response for the specified country
 	var specCountryData []Country
-
+	// Decode the response body into the struct
 	err = json.NewDecoder(countryResponse.Body).Decode(&specCountryData)
 	if err != nil {
 		http.Error(w, "Error during request to CountryAPI", http.StatusInternalServerError)
@@ -96,10 +94,10 @@ func handleGetNeighbour(w http.ResponseWriter, r *http.Request) {
 		if limitBool && limiter >= limitLen {
 			break
 		}
+		// Iterate through the country data to find the country that matches the university's country
 		for _, country := range countryData {
 
 			if uni.Alpha2Code == country.Alpha2Code {
-				log.Println("Inside country if")
 				// Create the response object for this university
 				responseObj := Response{
 					Name:      uni.Name,
