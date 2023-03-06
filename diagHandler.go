@@ -36,23 +36,7 @@ func handleGetDiag(w http.ResponseWriter) {
 	// URLs to invoke APIs
 	uniURL := "http://universities.hipolabs.com/search?name=university"
 	countryURL := "https://restcountries.com/v3.1/alpha/nor,fin,swe,rus"
-
-	/*
-		// Instantiate the client used to invoke CountriesAPI
-		countryClient := &http.Client{
-			Timeout: 5 * time.Second,
-		}
-
-		// Instantiate the client used to invoke UniversitiesAPI
-		uniClient := &http.Client{
-			Timeout: 5 * time.Second,
-		}
-
-		defer countryClient.CloseIdleConnections()
-		defer uniClient.CloseIdleConnections()
 	
-	*/
-
 	// Issue the requests for UniversitiesAPI and CountriesAPI
 	uniRes, err := http.Get(uniURL)
 	if err != nil {
