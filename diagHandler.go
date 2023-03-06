@@ -35,7 +35,7 @@ func handleGetDiag(w http.ResponseWriter) {
 
 	// URLs to invoke APIs
 	uniURL := "http://universities.hipolabs.com/search?name=university"
-	countryURL := "https://restcountries.com/v3.1/alpha/nor,fin,swe,rus"
+	countryURL := "https://restcountries.com/v3.1/alpha?codes=nor,swe,fin,rus"
 
 	diag := Diagnosis{}
 
