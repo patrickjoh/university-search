@@ -47,13 +47,16 @@ func handleGetUni(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// Initialize a slice to hold all ISO codes
 	var isocode []string
 
 	// Loop through each university in the response
 	for _, uni := range uniData {
 		// Check if the iso code is already in the slice
 		found := false
+		// Loop through each iso code in the slice
 		for _, code := range isocode {
+			// If the iso code is found, break out of the loop
 			if uni.Alpha2Code == code {
 				found = true
 				break
