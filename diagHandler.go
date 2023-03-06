@@ -34,23 +34,33 @@ func handleGetDiag(w http.ResponseWriter) {
 	uptime := time.Since(startTime)
 
 	// URLs to invoke APIs
-	uniURL := "http://universities.hipolabs.com/"
-	countryURL := "https://restcountries.com/"
+	uniURL := "http://universities.hipolabs.com/search?name=university"
+	countryURL := "https://restcountries.com/v3.1/alpha/nor,fin,swe,rus"
 
-	// Instantiate the client
-	client := &http.Client{
-		Timeout: 5 * time.Second,
-	}
-	defer client.CloseIdleConnections()
+	/*
+		// Instantiate the client used to invoke CountriesAPI
+		countryClient := &http.Client{
+			Timeout: 5 * time.Second,
+		}
+
+		// Instantiate the client used to invoke UniversitiesAPI
+		uniClient := &http.Client{
+			Timeout: 5 * time.Second,
+		}
+
+		defer countryClient.CloseIdleConnections()
+		defer uniClient.CloseIdleConnections()
+	
+	*/
 
 	// Issue the requests for UniversitiesAPI and CountriesAPI
-	uniRes, err := client.Get(uniURL)
+	uniRes, err := http.Get(uniURL)
 	if err != nil {
 		fmt.Errorf("error in response from UniversitiesAPI: %s", err)
 	}
 	defer uniRes.Body.Close()
 
-	countryRes, err := client.Get(countryURL)
+	countryRes, err := http.Get(countryURL)
 	if err != nil {
 		fmt.Errorf("error in response from CountriesAPI: %s", err)
 	}
