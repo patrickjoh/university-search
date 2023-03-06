@@ -42,7 +42,7 @@ func handleGetDiag(w http.ResponseWriter) {
 	// Issue the requests for UniversitiesAPI and CountriesAPI
 	uniRes, err := http.Get(uniURL)
 	if err != nil {
-		diag.UniversitiesAPI = string(http.StatusServiceUnavailable)
+		diag.UniversitiesAPI = http.StatusText(http.StatusServiceUnavailable)
 	} else {
 		diag.UniversitiesAPI = uniRes.Status
 		defer uniRes.Body.Close()
@@ -50,7 +50,7 @@ func handleGetDiag(w http.ResponseWriter) {
 
 	countryRes, err := http.Get(countryURL)
 	if err != nil {
-		diag.CountriesAPI = string(http.StatusServiceUnavailable)
+		diag.CountriesAPI = http.StatusText(http.StatusServiceUnavailable)
 	} else {
 		diag.CountriesAPI = countryRes.Status
 		defer countryRes.Body.Close()
