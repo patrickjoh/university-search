@@ -36,31 +36,33 @@ func handleGetDiag(w http.ResponseWriter) {
 	// URLs to invoke APIs
 	uniURL := "http://universities.hipolabs.com/search?name=university"
 	countryURL := "https://restcountries.com/v3.1/alpha/nor,fin,swe,rus"
-	
+
+	diag := Diagnosis{}
+
 	// Issue the requests for UniversitiesAPI and CountriesAPI
 	uniRes, err := http.Get(uniURL)
 	if err != nil {
-		fmt.Errorf("error in response from UniversitiesAPI: %s", err)
+		diag.UniversitiesAPI = string(http.StatusServiceUnavailable)
+	} else {
+		diag.UniversitiesAPI = uniRes.Status
+		defer uniRes.Body.Close()
 	}
-	defer uniRes.Body.Close()
 
 	countryRes, err := http.Get(countryURL)
 	if err != nil {
-		fmt.Errorf("error in response from CountriesAPI: %s", err)
+		diag.CountriesAPI = string(http.StatusServiceUnavailable)
+	} else {
+		diag.CountriesAPI = countryRes.Status
+		defer countryRes.Body.Close()
 	}
-	defer countryRes.Body.Close()
 
-	diag := Diagnosis{
-		UniversitiesAPI: uniRes.Status,
-		CountriesAPI:    countryRes.Status,
-		Version:         "v1",
-		Uptime:          uptime.String(),
-	}
+	diag.Version = "v1"
+	diag.Uptime = uptime.String()
 
 	// Encode struct to JSON
 	jsonBytes, err := json.Marshal(diag)
 	if err != nil {
-		fmt.Errorf("error in encoding to JSON: %s", err)
+		http.Error(w, fmt.Sprintf("error in encoding to JSON: %s", err), http.StatusInternalServerError)
 		return
 	}
 
