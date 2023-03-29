@@ -2,7 +2,7 @@
 
 ## Description
 
-A REST web appliction made in Golang that provides the client a service to retrieve information about universities that matches the search criteria, as explained below.
+A REST web application made in Golang that provides the client a service to retrieve information about universities that matches the search criteria, as explained below.
 The first endpoint of the service provides contextual information about language and country that the university is situated in.
 
 The second capability of this service is to find matching universities in countries other than the one you specified. This may for example help in finding universities to apply to, if you are looking to study abroad.
@@ -155,3 +155,4 @@ Path: diag/
 ### Acknowledgements
 * Christopher Frantz (Lecturer)
 
+`
