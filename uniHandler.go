@@ -147,9 +147,6 @@ func getCountries(isoCode []string) ([]Country, error) {
 	isoCodesStr := strings.Join(isoCode, ",")
 	countryUrl += isoCodesStr
 
-	// Remove the last comma from the URL
-	// countryUrl = countryUrl[:len(countryUrl)-1]
-
 	countryResponse, err := http.Get(countryUrl)
 	if err != nil {
 		return nil, err
