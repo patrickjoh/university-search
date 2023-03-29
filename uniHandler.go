@@ -72,7 +72,6 @@ func handleGetUni(w http.ResponseWriter, r *http.Request) {
 	countryData, err := getCountries(isocode)
 	if err != nil {
 		http.Error(w, "Error during request to CountryAPI", http.StatusInternalServerError)
-		log.Println("Error during request to CountryAPI")
 		return
 	}
 
@@ -96,6 +95,8 @@ func handleGetUni(w http.ResponseWriter, r *http.Request) {
 				}
 				// Add the response object to the slice of responses
 				response = append(response, responseObj)
+				// Break out of the loop
+				break
 			}
 		}
 	}
@@ -146,9 +147,8 @@ func getCountries(isoCode []string) ([]Country, error) {
 	isoCodesStr := strings.Join(isoCode, ",")
 	countryUrl += isoCodesStr
 
-	log.Println(countryUrl)
 	// Remove the last comma from the URL
-	countryUrl = countryUrl[:len(countryUrl)-1]
+	// countryUrl = countryUrl[:len(countryUrl)-1]
 
 	countryResponse, err := http.Get(countryUrl)
 	if err != nil {
