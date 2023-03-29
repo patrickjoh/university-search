@@ -20,6 +20,6 @@ const (
 	LINEBREAK = "\n"
 
 	UNIVERSITYAPI    = "http://universities.hipolabs.com/search?name="
-	COUNTRYAPI_CODES = "https://restcountries.com/v3.1/alpha?codes="
-	COUNTRYAPI_NAME  = "https://restcountries.com/v3.1/name/"
+	COUNTRYAPI_CODES = "http://129.241.150.113:8080/v3.1/alpha?codes="
+	COUNTRYAPI_NAME  = "http://129.241.150.113:8080/v3.1/name/"
 )
